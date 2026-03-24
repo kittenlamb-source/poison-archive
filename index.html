@@ -266,6 +266,7 @@
     }
 
     .entry {
+      grid-template-columns: 78px 1fr;
       display: grid;
       gap: 8px;
       width: 100%;
@@ -297,6 +298,65 @@
       transform: translateY(-2px);
       border-color: rgba(202,167,92,0.5);
       background: linear-gradient(180deg, rgba(202,167,92,0.10), rgba(255,255,255,0.03));
+    }
+
+    .specimen-thumb {
+      padding: 0;
+      width: 62px;
+      height: 82px;
+      border: 1px solid rgba(202,167,92,0.22);
+      border-radius: 14px;
+      background:
+        linear-gradient(180deg, rgba(202,167,92,0.10), rgba(255,255,255,0.03)),
+        linear-gradient(135deg, rgba(138,167,141,0.08), transparent 60%);
+      display: grid;
+      place-items: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+    }
+
+    .specimen-thumb::before {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border: 1px dashed rgba(202,167,92,0.15);
+      border-radius: 10px;
+    }
+
+    .specimen-thumb img,
+    .specimen-plate img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .specimen-glyph {
+      font-size: 1.4rem;
+      color: var(--gold);
+      opacity: 0.9;
+      z-index: 1;
+    }
+
+    .specimen-code {
+      position: absolute;
+      bottom: 7px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: .58rem;
+      letter-spacing: .12em;
+      color: #c8b899;
+      z-index: 1;
+    }
+
+    .entry-main {
+      display: grid;
+      gap: 8px;
     }
 
     .entry-top {
@@ -341,6 +401,63 @@
       padding: 26px;
       position: sticky;
       top: 16px;
+    }
+
+    .specimen-plate {
+      min-width: 180px;
+      max-width: 220px;
+      border: 1px solid rgba(202,167,92,0.18);
+      border-radius: 20px;
+      padding: 16px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015)),
+        radial-gradient(circle at 50% 18%, rgba(202,167,92,0.10), transparent 45%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .specimen-plate::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border: 1px dashed rgba(202,167,92,0.14);
+      border-radius: 14px;
+      pointer-events: none;
+    }
+
+    .specimen-plate .specimen-glyph-large {
+      font-size: 3.3rem;
+      text-align: center;
+      color: var(--gold);
+      line-height: 1;
+      margin-top: 6px;
+      margin-bottom: 12px;
+    }
+
+    .specimen-label {
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-size: .7rem;
+      color: #c8b899;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .specimen-credit {
+      color: #b8aa8d;
+      font-size: .76rem;
+      line-height: 1.45;
+      margin-top: 10px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .specimen-caption {
+      color: var(--muted);
+      font-size: .9rem;
+      line-height: 1.5;
+      text-align: center;
     }
 
     .detail-header {
@@ -428,6 +545,100 @@
       font-size: .92rem;
     }
 
+    .splash {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(202,167,92,0.08), transparent 24%),
+        radial-gradient(circle at 80% 18%, rgba(255,255,255,0.06), transparent 24%),
+        linear-gradient(180deg, rgba(7,12,10,0.98), rgba(13,23,19,0.98));
+      transition: opacity .35s ease, visibility .35s ease;
+    }
+
+    .splash.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .splash-card {
+      width: min(920px, 100%);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(17,28,24,0.96), rgba(13,23,20,0.94));
+      box-shadow: var(--shadow);
+      padding: 34px 30px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .splash-card::before {
+      content: "☠";
+      position: absolute;
+      right: 18px;
+      top: 4px;
+      font-size: clamp(70px, 12vw, 160px);
+      color: rgba(255,255,255,0.05);
+      line-height: 1;
+    }
+
+    .splash-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .9fr;
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    .splash h2 {
+      margin: 0 0 8px;
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      line-height: .98;
+    }
+
+    .splash p,
+    .splash li {
+      color: var(--muted);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .splash-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .enter-btn,
+    .ghost-btn {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 12px 18px;
+      font: inherit;
+      cursor: pointer;
+      color: var(--ink);
+      background: linear-gradient(180deg, rgba(202,167,92,0.18), rgba(202,167,92,0.08));
+    }
+
+    .ghost-btn {
+      background: rgba(255,255,255,0.03);
+      color: var(--muted);
+    }
+
+    .guide-panel {
+      margin-bottom: 18px;
+    }
+
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
+    }
+
     .empty {
       display: grid;
       place-items: center;
@@ -438,7 +649,12 @@
     }
 
     @media (max-width: 980px) {
-      .hero-grid, .layout, .toolbar, .record-grid { grid-template-columns: 1fr; }
+      .entry { grid-template-columns: 1fr; }
+      .specimen-thumb { width: 100%; height: 84px; }
+      .detail-header { flex-direction: column; }
+      .specimen-plate { max-width: none; width: 100%; }
+
+      .hero-grid, .layout, .toolbar, .record-grid, .guide-grid, .splash-grid { grid-template-columns: 1fr; }
       .detail { position: static; }
       .stack { max-height: none; }
       .hero { padding: 42px 22px 30px; }
@@ -446,6 +662,38 @@
   </style>
 </head>
 <body>
+  <div class="splash" id="splashScreen">
+    <section class="splash-card">
+      <div class="eyebrow">Cabinet of botanical danger</div>
+      <h2>Enter the Poison Archive</h2>
+      <p>
+        This archive brings together poisonous, medicinal, psychoactive, and culturally significant plants through
+        chemistry, history, power, labor, ritual, coercion, and survival.
+      </p>
+      <div class="splash-grid">
+        <article class="hero-card">
+          <h2 style="font-size:1rem;">Content Note</h2>
+          <p>
+            This material includes poisoning, bodily harm, reproductive control, enslavement, colonial violence,
+            self-harm history, and death. It is designed for historical and ethnobotanical study.
+          </p>
+        </article>
+        <article class="hero-card">
+          <h2 style="font-size:1rem;">How to Use</h2>
+          <ul>
+            <li>Browse by guided theme or category gallery.</li>
+            <li>Search by toxin, place, plant, or cultural theme.</li>
+            <li>Compare records across medicine, ritual, risk, and resistance.</li>
+          </ul>
+        </article>
+      </div>
+      <div class="splash-actions">
+        <button class="enter-btn" id="enterArchiveBtn" type="button">Enter the Archive</button>
+        <button class="ghost-btn" id="dismissNoteBtn" type="button">Skip to the records</button>
+      </div>
+    </section>
+  </div>
+
   <main class="frame">
     <section class="hero">
       <div class="eyebrow">Ethnobotany · Toxicity · Power</div>
@@ -471,6 +719,19 @@
             <li>Resistance, reproductive control, and enslavement</li>
           </ul>
         </article>
+      </div>
+    </section>
+
+    <section class="hero-card" style="margin-bottom:16px;">
+      <h2>Category Galleries</h2>
+      <p style="margin-bottom:12px;">Open the archive by broad subject area to move through it like a set of mini exhibits.</p>
+      <div class="meta" id="categoryButtons">
+        <button class="chip theme-btn category-btn" data-category="Pain & Wounds" type="button">Pain & Wounds</button>
+        <button class="chip theme-btn category-btn" data-category="Sedatives & Stimulants" type="button">Sedatives & Stimulants</button>
+        <button class="chip theme-btn category-btn" data-category="Psychoactives" type="button">Psychoactives</button>
+        <button class="chip theme-btn category-btn" data-category="Reproductive" type="button">Reproductive</button>
+        <button class="chip theme-btn category-btn" data-category="Chronic / Systemic Conditions" type="button">Chronic / Systemic</button>
+        <button class="chip theme-btn category-btn" data-category="Poison Only" type="button">Poison Only</button>
       </div>
     </section>
 
@@ -519,6 +780,20 @@
       </div>
     </section>
 
+    <section class="hero-card guide-panel">
+      <h2>Instructor Guide</h2>
+      <div class="guide-grid">
+        <div class="record">
+          <strong>Suggested student use</strong>
+          <span>Ask students to compare two plants from different categories and explain how chemistry, context, and culture change whether a plant is framed as medicine, poison, or both.</span>
+        </div>
+        <div class="record">
+          <strong>Discussion prompts</strong>
+          <span>Where is the boundary between care and harm? How do labor, empire, ritual, famine, and gender shape plant knowledge? Which risks are biological, and which are social?</span>
+        </div>
+      </div>
+    </section>
+
     <section class="layout">
       <div class="stack" id="cardList" aria-label="Plant records"></div>
       <article class="detail" id="detailPanel" aria-live="polite"></article>
@@ -542,6 +817,8 @@
         name: 'Aconite',
         common: 'Monkshood, Wolfsbane',
         scientific: 'Aconitum napellus',
+        image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Aconitum_napellus_010.JPG',
+        credit: 'Wikimedia Commons · File:Aconitum napellus 010.JPG',
         category: 'Neurotoxic Plants',
         region: 'Europe and Asia',
         compounds: ['aconitine (alkaloid)'],
@@ -556,6 +833,8 @@
         name: 'Poison Hemlock',
         common: 'Poison hemlock',
         scientific: 'Conium maculatum',
+        image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Conium%20maculatum.jpg',
+        credit: 'Wikimedia Commons · File:Conium maculatum.jpg',
         category: 'Neurotoxic Plants',
         region: 'Europe; now widespread in North America',
         compounds: ['coniine'],
@@ -626,6 +905,8 @@
         name: 'Oleander',
         common: 'Oleander',
         scientific: 'Nerium oleander',
+        image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Nerium%20oleander.jpg',
+        credit: 'Wikimedia Commons · File:Nerium oleander.jpg',
         category: 'Cardiotoxic Plants',
         region: 'Mediterranean region',
         compounds: ['oleandrin (cardiac glycoside)'],
@@ -640,6 +921,8 @@
         name: 'Foxglove',
         common: 'Foxglove',
         scientific: 'Digitalis purpurea',
+        image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Digitalis_purpurea.jpg',
+        credit: 'Wikimedia Commons · File:Digitalis purpurea.jpg',
         category: 'Cardiotoxic Plants',
         region: 'Europe',
         compounds: ['digitalis glycosides'],
@@ -682,6 +965,8 @@
         name: 'Castor Bean',
         common: 'Castor bean',
         scientific: 'Ricinus communis',
+        image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ricinus_communis_003.JPG',
+        credit: 'Wikimedia Commons · File:Ricinus communis 003.JPG',
         category: 'Cytotoxic Plants',
         region: 'Africa; now global',
         compounds: ['ricin'],
@@ -710,6 +995,8 @@
         name: 'Datura',
         common: 'Jimsonweed',
         scientific: 'Datura stramonium',
+        image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Datura_stramonium_003.JPG',
+        credit: 'Wikimedia Commons · File:Datura stramonium 003.JPG',
         category: 'Hallucinogenic / Deliriant Plants',
         region: 'The Americas',
         compounds: ['atropine', 'scopolamine', 'hyoscyamine'],
@@ -724,6 +1011,8 @@
         name: 'Deadly Nightshade',
         common: 'Belladonna',
         scientific: 'Atropa belladonna',
+        image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Atropa_belladonna_001.JPG',
+        credit: 'Wikimedia Commons · File:Atropa belladonna 001.JPG',
         category: 'Hallucinogenic / Deliriant Plants',
         region: 'Europe',
         compounds: ['tropane alkaloids'],
@@ -752,6 +1041,8 @@
         name: 'Mandrake',
         common: 'Mandrake',
         scientific: 'Mandragora officinarum',
+        image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Mandragora_officinarum_002.JPG',
+        credit: 'Wikimedia Commons · representative Commons file',
         category: 'Hallucinogenic / Deliriant Plants',
         region: 'Mediterranean region',
         compounds: ['tropane alkaloids'],
@@ -766,6 +1057,8 @@
         name: 'Cassava',
         common: 'Cassava',
         scientific: 'Manihot esculenta',
+        image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Manihot_esculenta_dsc07325.jpg',
+        credit: 'Wikimedia Commons · representative Commons file',
         category: 'Food & Crop Toxicity',
         region: 'Staple crop in Africa and South America',
         compounds: ['cyanogenic glycosides (linamarin)'],
@@ -822,6 +1115,8 @@
         name: 'Peacock Flower',
         common: 'Pride of Barbados',
         scientific: 'Caesalpinia pulcherrima',
+        image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Caesalpinia_pulcherrima_20zz.jpg',
+        credit: 'Wikimedia Commons · File:Caesalpinia pulcherrima 20zz.jpg',
         category: 'Poison as Resistance',
         region: 'Caribbean, especially Suriname and Barbados',
         compounds: ['course-specific reproductive/abortifacient discussion'],
@@ -1560,11 +1855,15 @@
       }
     ];
 
+    const splashScreen = document.getElementById('splashScreen');
+    const enterArchiveBtn = document.getElementById('enterArchiveBtn');
+    const dismissNoteBtn = document.getElementById('dismissNoteBtn');
     const categoryFilter = document.getElementById('categoryFilter');
     const searchInput = document.getElementById('searchInput');
     const randomBtn = document.getElementById('randomBtn');
     const clearThemeBtn = document.getElementById('clearThemeBtn');
     const themeButtons = document.getElementById('themeButtons');
+    const categoryButtons = document.getElementById('categoryButtons');
     const cardList = document.getElementById('cardList');
     const detailPanel = document.getElementById('detailPanel');
     const stats = document.getElementById('stats');
@@ -1579,6 +1878,7 @@
 
     let selectedId = archive[0]?.id;
     let activeTheme = null;
+    let activeGallery = null;
 
     function scoreText(item) {
       return [
@@ -1604,7 +1904,8 @@
         const matchesCat = cat === 'all' || item.category === cat;
         const matchesTerm = !term || scoreText(item).includes(term);
         const matchesTheme = !activeTheme || (themeMap[activeTheme] || []).includes(item.id);
-        return matchesCat && matchesTerm && matchesTheme;
+        const matchesGallery = !activeGallery || item.category === activeGallery;
+        return matchesCat && matchesTerm && matchesTheme && matchesGallery;
       });
     }
 
@@ -1620,7 +1921,39 @@
       if (activeTheme) {
         chips.push(`<span class="chip">Theme filter: ${activeTheme}</span>`);
       }
+      if (activeGallery) {
+        chips.push(`<span class="chip">Gallery: ${activeGallery}</span>`);
+      }
       stats.innerHTML = chips.join('');
+    }
+
+    function glyphFor(item) {
+      const map = {
+        'Pain & Wounds': '✢',
+        'Sedatives & Stimulants': '☽',
+        'Psychoactives': '◈',
+        'Reproductive': '❀',
+        'Chronic / Systemic Conditions': '☍',
+        'Poison Only': '☠',
+        'Neurotoxic Plants': '⚡',
+        'Cardiotoxic Plants': '♥',
+        'Cytotoxic Plants': '✧',
+        'Hallucinogenic / Deliriant Plants': '☾',
+        'Food & Crop Toxicity': '✶',
+        'Poison as Resistance': '❖'
+      };
+      return map[item.category] || '✦';
+    }
+
+    function imageMarkup(item, large = false) {
+      if (!item.image) return null;
+      const alt = `${item.name} specimen image`;
+      const cls = large ? '' : '';
+      return `<img src="${item.image}" alt="${alt}">`;
+    }
+
+    function codeFor(item) {
+      return item.id.replace(/[^a-z]/g, '').slice(0, 6).toUpperCase();
     }
 
     function renderList(items) {
@@ -1636,15 +1969,21 @@
 
       cardList.innerHTML = items.map(item => `
         <button class="entry ${item.id === selectedId ? 'active' : ''}" data-id="${item.id}">
-          <div class="entry-top">
-            <div>
-              <h3>${item.name}</h3>
-              <div class="latin">${item.scientific}</div>
-            </div>
-            <span class="tag">${item.category}</span>
+          <div class="specimen-thumb" aria-hidden="true">
+            ${item.image ? imageMarkup(item) : `<div class="specimen-glyph">${glyphFor(item)}</div>`}
+            <div class="specimen-code">${codeFor(item)}</div>
           </div>
-          <p><strong>Region:</strong> ${item.region}</p>
-          <p><strong>Compounds:</strong> ${item.compounds.join('; ')}</p>
+          <div class="entry-main">
+            <div class="entry-top">
+              <div>
+                <h3>${item.name}</h3>
+                <div class="latin">${item.scientific}</div>
+              </div>
+              <span class="tag">${item.category}</span>
+            </div>
+            <p><strong>Region:</strong> ${item.region}</p>
+            <p><strong>Compounds:</strong> ${item.compounds.join('; ')}</p>
+          </div>
         </button>
       `).join('');
 
@@ -1661,6 +2000,63 @@
     function renderDetail(item) {
       if (!item) {
         detailPanel.innerHTML = `<div class="empty">Select a record to view the full archive entry.</div>`;
+        return;
+      }
+
+      detailPanel.innerHTML = `
+        <div class="detail-header">
+          <div>
+            <h2>${item.name}</h2>
+            <div class="latin">${item.scientific}</div>
+          </div>
+          <div class="specimen-plate" aria-label="Specimen plate">
+            <div class="specimen-label">Archive specimen</div>
+            ${item.image ? imageMarkup(item, true) : `<div class="specimen-glyph-large">${glyphFor(item)}</div>`}
+            <div class="specimen-caption">${item.common}<br>${item.region}</div>
+            ${item.credit ? `<div class="specimen-credit">Image: ${item.credit}</div>` : ''}
+          </div>
+        </div>
+
+        <div class="meta">
+          <span class="chip">Common name(s): ${item.common}</span>
+          <span class="chip">Region: ${item.region}</span>
+          <span class="chip">Specimen code: ${codeFor(item)}</span>
+        </div>
+
+        <section class="section">
+          <h3>Active Compounds</h3>
+          <ul>${item.compounds.map(c => `<li>${c}</li>`).join('')}</ul>
+        </section>
+
+        <section class="section">
+          <h3>Mechanism</h3>
+          <p>${item.mechanism}</p>
+        </section>
+
+        <section class="section">
+          <h3>Effects on the Body</h3>
+          <ul>${item.effects.map(e => `<li>${e}</li>`).join('')}</ul>
+        </section>
+
+        <section class="section">
+          <h3>Archive Notes</h3>
+          <div class="record-grid">
+            <div class="record">
+              <strong>Historical Case / Reference</strong>
+              <span>${item.history}</span>
+            </div>
+            <div class="record">
+              <strong>Cultural / Ethnobotanical Notes</strong>
+              <span>${item.culture}</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h3>Themes</h3>
+          <div class="meta">${item.themes.map(t => `<span class="chip">${t}</span>`).join('')}</div>
+        </section>
+      `;
         return;
       }
 
@@ -1722,12 +2118,14 @@
 
     searchInput.addEventListener('input', () => {
       activeTheme = null;
+      activeGallery = null;
       document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
       render();
     });
 
     categoryFilter.addEventListener('change', () => {
       activeTheme = null;
+      activeGallery = null;
       document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
       render();
     });
@@ -1742,25 +2140,57 @@
 
     clearThemeBtn.addEventListener('click', () => {
       activeTheme = null;
+      activeGallery = null;
       document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
       searchInput.value = '';
       categoryFilter.value = 'all';
       render();
     });
 
+    enterArchiveBtn.addEventListener('click', () => {
+      splashScreen.classList.add('hidden');
+    });
+
+    dismissNoteBtn.addEventListener('click', () => {
+      splashScreen.classList.add('hidden');
+    });
+
     themeButtons.addEventListener('click', (event) => {
       const btn = event.target.closest('.theme-btn');
       if (!btn) return;
 
-      document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('#themeButtons .theme-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
 
       activeTheme = btn.dataset.theme;
+      activeGallery = null;
+      document.querySelectorAll('#categoryButtons .theme-btn').forEach(b => b.classList.remove('active'));
       categoryFilter.value = 'all';
       searchInput.value = '';
 
       const ids = themeMap[activeTheme] || [];
       const found = archive.find(item => ids.includes(item.id));
+      if (found) {
+        selectedId = found.id;
+      }
+
+      render();
+    });
+
+    categoryButtons.addEventListener('click', (event) => {
+      const btn = event.target.closest('.category-btn');
+      if (!btn) return;
+
+      document.querySelectorAll('#categoryButtons .theme-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      activeGallery = btn.dataset.category;
+      activeTheme = null;
+      document.querySelectorAll('#themeButtons .theme-btn').forEach(b => b.classList.remove('active'));
+      categoryFilter.value = 'all';
+      searchInput.value = '';
+
+      const found = archive.find(item => item.category === activeGallery);
       if (found) {
         selectedId = found.id;
       }
