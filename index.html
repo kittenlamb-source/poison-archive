@@ -177,7 +177,7 @@
 
     .toolbar {
       display: grid;
-      grid-template-columns: 1.2fr .75fr .75fr;
+      grid-template-columns: 1.2fr .75fr .75fr .75fr;
       gap: 12px;
       margin: 16px 0 18px;
     }
@@ -220,6 +220,25 @@
       border-radius: 999px;
       padding: 8px 12px;
       font-size: .92rem;
+    }
+
+    .theme-btn {
+      cursor: pointer;
+      font: inherit;
+      color: var(--muted);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .theme-btn:hover {
+      border-color: rgba(202,167,92,0.45);
+      color: var(--ink);
+      transform: translateY(-1px);
+    }
+
+    .theme-btn.active {
+      background: rgba(202,167,92,0.15);
+      color: var(--ink);
+      border-color: rgba(202,167,92,0.6);
     }
 
     .layout {
@@ -459,11 +478,11 @@
       <h2>Guided Paths</h2>
       <p style="margin-bottom:12px;">Use these to move through the archive by big ideas instead of alphabetical browsing.</p>
       <div class="meta" id="themeButtons">
-        <span class="chip">Medicine vs Poison</span>
-        <span class="chip">Resistance</span>
-        <span class="chip">Witchcraft & Folklore</span>
-        <span class="chip">Food Toxicity</span>
-        <span class="chip">Colonial Science</span>
+        <button class="chip theme-btn" data-theme="medicine" type="button">Medicine vs Poison</button>
+        <button class="chip theme-btn" data-theme="resistance" type="button">Resistance</button>
+        <button class="chip theme-btn" data-theme="folklore" type="button">Witchcraft & Folklore</button>
+        <button class="chip theme-btn" data-theme="food" type="button">Food Toxicity</button>
+        <button class="chip theme-btn" data-theme="science" type="button">Colonial Science</button>
       </div>
     </section>
 
@@ -473,6 +492,7 @@
         <option value="all">All categories</option>
       </select>
       <button id="randomBtn" type="button">Open a random record</button>
+      <button id="clearThemeBtn" type="button">Clear theme</button>
     </section>
 
     <div class="stats" id="stats"></div>
@@ -509,11 +529,11 @@
 
   <script>
     const themeMap = {
-      'medicine': ['foxglove', 'nicotiana', 'mandrake'],
-      'resistance': ['peacock-flower'],
-      'folklore': ['datura', 'belladonna', 'henbane', 'mandrake'],
-      'food': ['cassava', 'ergot', 'grass-pea', 'cashew'],
-      'science': ['curare', 'kombe', 'foxglove', 'ergot']
+      medicine: ['foxglove', 'nicotiana', 'mandrake'],
+      resistance: ['peacock-flower'],
+      folklore: ['datura', 'belladonna', 'henbane', 'mandrake'],
+      food: ['cassava', 'ergot', 'grass-pea', 'cashew'],
+      science: ['curare', 'kombe', 'foxglove', 'ergot']
     };
 
     const archive = [
@@ -816,6 +836,7 @@
     const categoryFilter = document.getElementById('categoryFilter');
     const searchInput = document.getElementById('searchInput');
     const randomBtn = document.getElementById('randomBtn');
+    const clearThemeBtn = document.getElementById('clearThemeBtn');
     const themeButtons = document.getElementById('themeButtons');
     const cardList = document.getElementById('cardList');
     const detailPanel = document.getElementById('detailPanel');
@@ -830,6 +851,7 @@
     });
 
     let selectedId = archive[0]?.id;
+    let activeTheme = null;
 
     function scoreText(item) {
       return [
@@ -850,10 +872,12 @@
     function getFiltered() {
       const term = searchInput.value.trim().toLowerCase();
       const cat = categoryFilter.value;
+
       return archive.filter(item => {
         const matchesCat = cat === 'all' || item.category === cat;
         const matchesTerm = !term || scoreText(item).includes(term);
-        return matchesCat && matchesTerm;
+        const matchesTheme = !activeTheme || (themeMap[activeTheme] || []).includes(item.id);
+        return matchesCat && matchesTerm && matchesTheme;
       });
     }
 
@@ -866,6 +890,9 @@
       Object.entries(categoryCounts).forEach(([cat, count]) => {
         chips.push(`<span class="chip">${cat}: ${count}</span>`);
       });
+      if (activeTheme) {
+        chips.push(`<span class="chip">Theme filter: ${activeTheme}</span>`);
+      }
       stats.innerHTML = chips.join('');
     }
 
@@ -966,8 +993,18 @@
       renderList(items);
     }
 
-    searchInput.addEventListener('input', render);
-    categoryFilter.addEventListener('change', render);
+    searchInput.addEventListener('input', () => {
+      activeTheme = null;
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+      render();
+    });
+
+    categoryFilter.addEventListener('change', () => {
+      activeTheme = null;
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+      render();
+    });
+
     randomBtn.addEventListener('click', () => {
       const items = getFiltered();
       if (!items.length) return;
@@ -976,25 +1013,32 @@
       render();
     });
 
+    clearThemeBtn.addEventListener('click', () => {
+      activeTheme = null;
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+      searchInput.value = '';
+      categoryFilter.value = 'all';
+      render();
+    });
+
     themeButtons.addEventListener('click', (event) => {
-      const label = event.target.textContent || '';
-      const map = {
-        'Medicine vs Poison': 'medicine',
-        'Resistance': 'resistance',
-        'Witchcraft & Folklore': 'folklore',
-        'Food Toxicity': 'food',
-        'Colonial Science': 'science'
-      };
-      const key = map[label.trim()];
-      if (!key) return;
-      const ids = themeMap[key];
+      const btn = event.target.closest('.theme-btn');
+      if (!btn) return;
+
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      activeTheme = btn.dataset.theme;
+      categoryFilter.value = 'all';
+      searchInput.value = '';
+
+      const ids = themeMap[activeTheme] || [];
       const found = archive.find(item => ids.includes(item.id));
       if (found) {
-        categoryFilter.value = 'all';
-        searchInput.value = '';
         selectedId = found.id;
-        render();
       }
+
+      render();
     });
 
     render();
