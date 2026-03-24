@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Poison Archive</title>
+  <style>
+    :root {
+      --bg: #0b1512;
+      --bg-soft: #12201c;
+      --panel: rgba(19, 31, 27, 0.88);
+      --panel-2: rgba(26, 41, 36, 0.92);
+      --ink: #efe6d1;
+      --muted: #c9bfa8;
+      --gold: #caa75c;
+      --gold-soft: #8f7440;
+      --line: rgba(202, 167, 92, 0.22);
+      --fog: rgba(225, 220, 205, 0.06);
+      --accent: #8aa78d;
+      --danger: #c87070;
+      --shadow: 0 14px 34px rgba(0, 0, 0, 0.42);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(202,167,92,0.08), transparent 24%),
+        radial-gradient(circle at 80% 10%, rgba(255,255,255,0.05), transparent 20%),
+        radial-gradient(circle at 70% 70%, rgba(138,167,141,0.08), transparent 24%),
+        linear-gradient(180deg, #09110f 0%, #10201b 100%);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::before {
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255,255,255,0.06) 0 2px, transparent 3px),
+        radial-gradient(circle at 22% 70%, rgba(202,167,92,0.09) 0 1.5px, transparent 3px),
+        radial-gradient(circle at 68% 28%, rgba(255,255,255,0.05) 0 2px, transparent 3px),
+        radial-gradient(circle at 82% 76%, rgba(202,167,92,0.08) 0 2px, transparent 3px),
+        radial-gradient(circle at 40% 55%, rgba(255,255,255,0.05) 0 1.5px, transparent 3px);
+      background-size: 260px 260px, 300px 300px, 240px 240px, 290px 290px, 250px 250px;
+      opacity: .7;
+      animation: drift 28s linear infinite;
+    }
+
+    body::after {
+      background:
+        radial-gradient(ellipse at top, rgba(255,255,255,0.10), transparent 58%),
+        radial-gradient(ellipse at 50% 40%, rgba(255,255,255,0.05), transparent 52%),
+        radial-gradient(ellipse at bottom, rgba(0,0,0,0.28), transparent 60%);
+      mix-blend-mode: screen;
+      opacity: .55;
+    }
+
+    @keyframes drift {
+      from { transform: translateY(0px); }
+      50% { transform: translateY(14px); }
+      to { transform: translateY(0px); }
+    }
+
+    .frame {
+      position: relative;
+      z-index: 1;
+      width: min(1240px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 48px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background:
+        linear-gradient(135deg, rgba(13,22,18,0.95), rgba(18,31,27,0.84)),
+        linear-gradient(180deg, rgba(202,167,92,0.05), transparent 60%);
+      box-shadow: var(--shadow);
+      padding: 56px 34px 38px;
+      margin-bottom: 20px;
+      isolation: isolate;
+    }
+
+    .hero::before {
+      content: "☠";
+      position: absolute;
+      right: 26px;
+      top: 8px;
+      font-size: clamp(80px, 14vw, 190px);
+      color: rgba(255,255,255,0.05);
+      line-height: 1;
+      z-index: -1;
+      filter: blur(0.2px);
+    }
+
+    .hero::after {
+      content: "❦  ❧  ❦";
+      position: absolute;
+      left: 28px;
+      bottom: 18px;
+      letter-spacing: 14px;
+      font-size: 30px;
+      color: rgba(138,167,141,0.22);
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: .2em;
+      color: var(--gold);
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.5rem, 5vw, 4.8rem);
+      line-height: .96;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      max-width: 860px;
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 1.06rem;
+      line-height: 1.7;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.6fr .9fr;
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .hero-card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px 18px 16px;
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(4px);
+    }
+
+    .hero-card h2 {
+      font-size: 1rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin: 0 0 10px;
+    }
+
+    .hero-card p, .hero-card li {
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .hero-card ul {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1.2fr .75fr .75fr;
+      gap: 12px;
+      margin: 16px 0 18px;
+    }
+
+    .toolbar input,
+    .toolbar select,
+    .toolbar button {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--ink);
+      padding: 14px 16px;
+      border-radius: 16px;
+      outline: none;
+      font: inherit;
+      box-shadow: var(--shadow);
+    }
+
+    .toolbar input::placeholder { color: #b6ab95; }
+
+    .toolbar button {
+      cursor: pointer;
+      background: linear-gradient(180deg, rgba(202,167,92,0.15), rgba(202,167,92,0.06));
+      transition: transform .15s ease, border-color .15s ease;
+    }
+
+    .toolbar button:hover { transform: translateY(-1px); border-color: rgba(202,167,92,0.45); }
+
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.035);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: .92rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(300px, 430px) minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .stack,
+    .detail {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(16,27,24,0.92), rgba(14,24,21,0.86));
+      box-shadow: var(--shadow);
+      min-height: 60vh;
+    }
+
+    .stack {
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+      max-height: 74vh;
+      overflow: auto;
+    }
+
+    .entry {
+      display: grid;
+      gap: 8px;
+      width: 100%;
+      text-align: left;
+      color: var(--ink);
+      border: 1px solid rgba(202,167,92,0.16);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015));
+      border-radius: 18px;
+      padding: 16px 16px 14px;
+      cursor: pointer;
+      transition: transform .15s ease, border-color .2s ease, background .2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .entry::after {
+      content: "";
+      position: absolute;
+      inset: auto -10% -35% auto;
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, rgba(202,167,92,0.10), transparent 65%);
+      pointer-events: none;
+    }
+
+    .entry:hover,
+    .entry.active {
+      transform: translateY(-2px);
+      border-color: rgba(202,167,92,0.5);
+      background: linear-gradient(180deg, rgba(202,167,92,0.10), rgba(255,255,255,0.03));
+    }
+
+    .entry-top {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .entry h3 {
+      margin: 0;
+      font-size: 1.18rem;
+      line-height: 1.15;
+    }
+
+    .latin {
+      color: var(--accent);
+      font-style: italic;
+      font-size: .96rem;
+    }
+
+    .tag {
+      white-space: nowrap;
+      font-size: .78rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--gold);
+      border: 1px solid rgba(202,167,92,0.22);
+      border-radius: 999px;
+      padding: 6px 8px;
+      background: rgba(202,167,92,0.08);
+    }
+
+    .entry p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: .96rem;
+    }
+
+    .detail {
+      padding: 26px;
+      position: sticky;
+      top: 16px;
+    }
+
+    .detail-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+
+    .detail-header h2 {
+      font-size: clamp(2rem, 3vw, 3rem);
+      line-height: 1;
+      margin: 0 0 8px;
+    }
+
+    .detail-header .latin {
+      font-size: 1.06rem;
+      color: var(--accent);
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .meta .chip { background: rgba(255,255,255,0.03); }
+
+    .section {
+      border-top: 1px solid rgba(202,167,92,0.14);
+      padding-top: 16px;
+      margin-top: 16px;
+    }
+
+    .section:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+
+    .section h3 {
+      margin: 0 0 10px;
+      color: var(--gold);
+      font-size: .95rem;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    .section p,
+    .section li {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+
+    .section ul {
+      margin: 0;
+      padding-left: 20px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .record-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
+    }
+
+    .record {
+      border: 1px solid rgba(202,167,92,0.14);
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(255,255,255,0.025);
+    }
+
+    .record strong {
+      display: block;
+      color: var(--ink);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .footer-note {
+      color: #b5aa95;
+      text-align: center;
+      margin-top: 22px;
+      font-size: .92rem;
+    }
+
+    .empty {
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      min-height: 320px;
+      text-align: center;
+      padding: 24px;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid, .layout, .toolbar, .record-grid { grid-template-columns: 1fr; }
+      .detail { position: static; }
+      .stack { max-height: none; }
+      .hero { padding: 42px 22px 30px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="frame">
+    <section class="hero">
+      <div class="eyebrow">Ethnobotany · Toxicity · Power</div>
+      <h1>Poison Archive</h1>
+      <p class="subtitle">
+        A dark academic cabinet of botanical danger: toxic plants, crop risks, and histories of medicine,
+        ritual, coercion, survival, and resistance.
+      </p>
+      <div class="hero-grid">
+        <article class="hero-card">
+          <h2>Scope</h2>
+          <p>
+            This archive is organized around mechanism, culture, and consequence. Each record traces a plant or
+            toxic organism through compounds, body systems, historical episodes, and ethnobotanical meaning.
+          </p>
+        </article>
+        <article class="hero-card">
+          <h2>Suggested Themes</h2>
+          <ul>
+            <li>Poison versus medicine</li>
+            <li>Food insecurity and crop toxicity</li>
+            <li>Deliriants, ritual, and altered states</li>
+            <li>Resistance, reproductive control, and enslavement</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="hero-card" style="margin-bottom:16px;">
+      <h2>Guided Paths</h2>
+      <p style="margin-bottom:12px;">Use these to move through the archive by big ideas instead of alphabetical browsing.</p>
+      <div class="meta" id="themeButtons">
+        <span class="chip">Medicine vs Poison</span>
+        <span class="chip">Resistance</span>
+        <span class="chip">Witchcraft & Folklore</span>
+        <span class="chip">Food Toxicity</span>
+        <span class="chip">Colonial Science</span>
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <input id="searchInput" type="search" placeholder="Search by plant, toxin, place, or theme…" />
+      <select id="categoryFilter">
+        <option value="all">All categories</option>
+      </select>
+      <button id="randomBtn" type="button">Open a random record</button>
+    </section>
+
+    <div class="stats" id="stats"></div>
+
+    <section class="hero-card" style="margin-bottom:18px;">
+      <h2>Theme Notes</h2>
+      <div class="record-grid" id="themeNotes">
+        <div class="record">
+          <strong>Medicine vs Poison</strong>
+          <span>Foxglove, tobacco, and other plants show how preparation, dose, and context can transform a therapeutic agent into a lethal one.</span>
+        </div>
+        <div class="record">
+          <strong>Resistance & Reproductive Knowledge</strong>
+          <span>Peacock flower opens discussion of abortion, reproductive refusal, and enslaved women’s botanical knowledge as resistance.</span>
+        </div>
+        <div class="record">
+          <strong>Deliriants & Folklore</strong>
+          <span>Datura, belladonna, henbane, and mandrake are useful for separating true hallucination from delirium while tracing magic and witchcraft traditions.</span>
+        </div>
+        <div class="record">
+          <strong>Food Systems & Survival</strong>
+          <span>Cassava, ergot, grass pea, and cashew connect toxicity to famine, processing knowledge, labor, and crop dependence.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="layout">
+      <div class="stack" id="cardList" aria-label="Plant records"></div>
+      <article class="detail" id="detailPanel" aria-live="polite"></article>
+    </section>
+
+    <p class="footer-note">Built as a static site for GitHub Pages. Edit the dataset in the script to expand, revise, or restyle.</p>
+  </main>
+
+  <script>
+    const themeMap = {
+      'medicine': ['foxglove', 'nicotiana', 'mandrake'],
+      'resistance': ['peacock-flower'],
+      'folklore': ['datura', 'belladonna', 'henbane', 'mandrake'],
+      'food': ['cassava', 'ergot', 'grass-pea', 'cashew'],
+      'science': ['curare', 'kombe', 'foxglove', 'ergot']
+    };
+
+    const archive = [
+      {
+        id: 'aconite',
+        name: 'Aconite',
+        common: 'Monkshood, Wolfsbane',
+        scientific: 'Aconitum napellus',
+        category: 'Neurotoxic Plants',
+        region: 'Europe and Asia',
+        compounds: ['aconitine (alkaloid)'],
+        mechanism: 'Opens sodium channels, causing uncontrolled nerve firing and dangerous cardiac instability.',
+        effects: ['tingling of the mouth and extremities', 'numbness', 'severe arrhythmias', 'respiratory paralysis'],
+        history: 'In 1856 in Dingwall, Scotland, aconite root was reportedly mistaken for horseradish, resulting in fatal poisoning of two priests.',
+        culture: 'Historically associated with hunting poisons and warfare toxins.',
+        themes: ['warfare', 'hunting', 'dose and danger']
+      },
+      {
+        id: 'poison-hemlock',
+        name: 'Poison Hemlock',
+        common: 'Poison hemlock',
+        scientific: 'Conium maculatum',
+        category: 'Neurotoxic Plants',
+        region: 'Europe; now widespread in North America',
+        compounds: ['coniine'],
+        mechanism: 'Disrupts the neuromuscular junction, producing progressive paralysis.',
+        effects: ['ascending paralysis from the legs upward', 'respiratory failure', 'consciousness may be preserved until late stages'],
+        history: 'The most famous historical association is the 399 BCE execution of Socrates in Athens.',
+        culture: 'A classic teaching example for state power, toxic botany, and historical execution.',
+        themes: ['law and punishment', 'classical history', 'paralysis']
+      },
+      {
+        id: 'water-hemlock',
+        name: 'Water Hemlock',
+        common: 'Water hemlock',
+        scientific: 'Cicuta spp.',
+        category: 'Neurotoxic Plants',
+        region: 'North America and Europe',
+        compounds: ['cicutoxin'],
+        mechanism: 'Causes extreme CNS overstimulation.',
+        effects: ['violent seizures', 'rapid collapse', 'death may occur quickly'],
+        history: 'Often discussed as one of the most toxic plants in North America.',
+        culture: 'A major risk because it is sometimes mistaken for edible plants such as wild carrot or parsnip.',
+        themes: ['misidentification', 'foraging risk', 'seizures']
+      },
+      {
+        id: 'curare',
+        name: 'Curare',
+        common: 'Curare',
+        scientific: 'Mixture from South American vines, including Chondrodendron tomentosum',
+        category: 'Neurotoxic Plants',
+        region: 'Amazonia / South America',
+        compounds: ['d-tubocurarine'],
+        mechanism: 'Blocks acetylcholine receptors and prevents muscle contraction.',
+        effects: ['muscle paralysis', 'respiratory failure'],
+        history: 'Widely discussed in the history of pharmacology, anesthesia, and neuromuscular blockade.',
+        culture: 'Used by Indigenous groups in the Amazon on blow darts for hunting. A key detail is that it is not toxic if swallowed and must enter the bloodstream.',
+        themes: ['hunting', 'Indigenous knowledge', 'delivery matters']
+      },
+      {
+        id: 'nicotiana',
+        name: 'Nicotine Plants',
+        common: 'Tobacco',
+        scientific: 'Nicotiana spp.',
+        category: 'Neurotoxic Plants',
+        region: 'The Americas',
+        compounds: ['nicotine (alkaloid)'],
+        mechanism: 'Initially stimulates and then disrupts nervous system signaling.',
+        effects: ['seizures at high doses', 'respiratory collapse'],
+        history: 'Important in histories of labor, ritual exchange, colonial trade, and agricultural exposure.',
+        culture: 'Sacred in many Indigenous traditions and also used ritually and medicinally. Occupational exposure can produce green tobacco sickness through nicotine absorption across the skin.',
+        themes: ['ritual use', 'labor', 'colonial trade', 'occupational hazard']
+      },
+      {
+        id: 'coyoteillo',
+        name: 'Coyoteillo',
+        common: 'Coyoteillo',
+        scientific: 'Karwinskia humboldtiana',
+        category: 'Neurotoxic Plants',
+        region: 'Mexico and the southwestern United States',
+        compounds: ['anthracenone toxins'],
+        mechanism: 'Delayed neurotoxicity that progresses after ingestion over days to weeks.',
+        effects: ['progressive paralysis beginning in the legs', 'upward spread of weakness'],
+        history: 'Notable for its delayed course, which can obscure diagnosis.',
+        culture: 'A strong example that plant poisoning is not always immediate and dramatic.',
+        themes: ['delayed toxicity', 'diagnostic difficulty', 'paralysis']
+      },
+      {
+        id: 'oleander',
+        name: 'Oleander',
+        common: 'Oleander',
+        scientific: 'Nerium oleander',
+        category: 'Cardiotoxic Plants',
+        region: 'Mediterranean region',
+        compounds: ['oleandrin (cardiac glycoside)'],
+        mechanism: 'Disrupts heart rhythm through potent cardiotoxic glycoside activity.',
+        effects: ['nausea', 'vomiting', 'arrhythmia', 'death'],
+        history: 'Often used in toxicology teaching because the plant remains dangerous in many forms.',
+        culture: 'Its toxins may persist in smoke from burning wood, in honey, and in compost for long periods.',
+        themes: ['cardiac toxicity', 'persistence', 'environmental hazard']
+      },
+      {
+        id: 'foxglove',
+        name: 'Foxglove',
+        common: 'Foxglove',
+        scientific: 'Digitalis purpurea',
+        category: 'Cardiotoxic Plants',
+        region: 'Europe',
+        compounds: ['digitalis glycosides'],
+        mechanism: 'Alters heart contraction and electrical rhythm.',
+        effects: ['slow or irregular heartbeat', 'visual disturbances'],
+        history: 'Central to the history of cardiology and drug development.',
+        culture: 'A classic ethnobotanical example of medicine versus poison.',
+        themes: ['medicine vs poison', 'pharmacology', 'cardiac rhythm']
+      },
+      {
+        id: 'suicide-tree',
+        name: 'Suicide Tree',
+        common: 'Suicide tree',
+        scientific: 'Cerbera odollam',
+        category: 'Cardiotoxic Plants',
+        region: 'India and Southeast Asia',
+        compounds: ['cerberin (cardiac glycoside)'],
+        mechanism: 'Severely disrupts cardiac signaling and function.',
+        effects: ['sudden collapse', 'death within 3–6 hours in severe poisoning'],
+        history: 'Widely discussed in relation to suicides and poisonings in Kerala, India.',
+        culture: 'An example of how certain plants become socially legible as instruments of death.',
+        themes: ['forensic history', 'self-harm history', 'cardiac collapse']
+      },
+      {
+        id: 'kombe',
+        name: 'Kombe',
+        common: 'African vine',
+        scientific: 'Kombe (commonly associated with African arrow poison traditions)',
+        category: 'Cardiotoxic Plants',
+        region: 'Parts of West Africa',
+        compounds: ['cardioactive compounds; refine with course notes'],
+        mechanism: 'Alters heart rhythm and became important in early pharmacological study.',
+        effects: ['dangerous rhythm disturbance'],
+        history: 'Studied in early pharmacology because of its dramatic cardiac effects.',
+        culture: 'Useful for discussions of how Indigenous toxic knowledge entered European science.',
+        themes: ['pharmacology', 'colonial science', 'cardiac toxins']
+      },
+      {
+        id: 'castor-bean',
+        name: 'Castor Bean',
+        common: 'Castor bean',
+        scientific: 'Ricinus communis',
+        category: 'Cytotoxic Plants',
+        region: 'Africa; now global',
+        compounds: ['ricin'],
+        mechanism: 'Inhibits cellular protein synthesis.',
+        effects: ['vomiting', 'organ failure', 'death'],
+        history: 'Associated with the 1978 assassination of Georgi Markov in London.',
+        culture: 'A key example of botanical toxins entering modern political violence narratives.',
+        themes: ['assassination', 'protein synthesis', 'politics']
+      },
+      {
+        id: 'rosary-pea',
+        name: 'Rosary Pea',
+        common: 'Rosary pea',
+        scientific: 'Abrus precatorius',
+        category: 'Cytotoxic Plants',
+        region: 'Tropical regions',
+        compounds: ['abrin'],
+        mechanism: 'Shuts down cellular protein production.',
+        effects: ['extreme toxicity in very small doses', 'multi-organ damage'],
+        history: 'Long noted for the danger hidden in visually striking seeds.',
+        culture: 'Seeds have been used as beads in jewelry, creating tension between beauty and hazard.',
+        themes: ['beauty and danger', 'material culture', 'protein synthesis']
+      },
+      {
+        id: 'datura',
+        name: 'Datura',
+        common: 'Jimsonweed',
+        scientific: 'Datura stramonium',
+        category: 'Hallucinogenic / Deliriant Plants',
+        region: 'The Americas',
+        compounds: ['atropine', 'scopolamine', 'hyoscyamine'],
+        mechanism: 'Produces anticholinergic delirium rather than true psychedelic hallucination.',
+        effects: ['confusion', 'loss of control', 'amnesia', 'dangerous delirium'],
+        history: 'Frequently linked to the 1607 Jamestown poisoning and accounts of 1670s British soldiers experiencing prolonged delirium.',
+        culture: 'An important teaching case for the difference between hallucination and deliriant states.',
+        themes: ['witchcraft and folklore', 'colonial history', 'delirium']
+      },
+      {
+        id: 'belladonna',
+        name: 'Deadly Nightshade',
+        common: 'Belladonna',
+        scientific: 'Atropa belladonna',
+        category: 'Hallucinogenic / Deliriant Plants',
+        region: 'Europe',
+        compounds: ['tropane alkaloids'],
+        mechanism: 'Anticholinergic toxicity affecting cognition, vision, and heart rate.',
+        effects: ['hallucinations or visions', 'rapid heart rate', 'seizures'],
+        history: 'A recurring figure in European toxic plant lore.',
+        culture: 'Used cosmetically for pupil dilation and woven into witchcraft folklore.',
+        themes: ['beauty and danger', 'witchcraft', 'deliriants']
+      },
+      {
+        id: 'henbane',
+        name: 'Henbane',
+        common: 'Henbane',
+        scientific: 'Hyoscyamus niger',
+        category: 'Hallucinogenic / Deliriant Plants',
+        region: 'Europe and western Asia',
+        compounds: ['tropane alkaloids'],
+        mechanism: 'Anticholinergic toxicity with severe CNS disruption.',
+        effects: ['delirium', 'coma'],
+        history: 'Appears in histories of early anesthesia and intoxicating preparations.',
+        culture: 'Associated with so-called flying ointments and anesthetic mixtures.',
+        themes: ['ritual mixtures', 'anesthesia history', 'delirium']
+      },
+      {
+        id: 'mandrake',
+        name: 'Mandrake',
+        common: 'Mandrake',
+        scientific: 'Mandragora officinarum',
+        category: 'Hallucinogenic / Deliriant Plants',
+        region: 'Mediterranean region',
+        compounds: ['tropane alkaloids'],
+        mechanism: 'Sedative and deliriant effects tied to tropane chemistry.',
+        effects: ['sedation', 'hallucinations'],
+        history: 'Often linked to a story that Hannibal used it around 200 BCE to sedate enemies.',
+        culture: 'A deeply symbolic plant in magic, medicine, and folklore.',
+        themes: ['folklore', 'warfare', 'sedation']
+      },
+      {
+        id: 'cassava',
+        name: 'Cassava',
+        common: 'Cassava',
+        scientific: 'Manihot esculenta',
+        category: 'Food & Crop Toxicity',
+        region: 'Staple crop in Africa and South America',
+        compounds: ['cyanogenic glycosides (linamarin)'],
+        mechanism: 'Improper processing can release cyanide.',
+        effects: ['cyanide exposure', 'neurological injury', 'konzo in severe chronic exposure contexts'],
+        history: 'A powerful case for how staple foods can become toxic under conditions of poverty, stress, or inadequate processing.',
+        culture: 'Essential for discussing food security, preparation knowledge, and survival.',
+        themes: ['food processing', 'poverty', 'crop safety']
+      },
+      {
+        id: 'ergot',
+        name: 'Ergot Fungus',
+        common: 'Ergot',
+        scientific: 'Claviceps purpurea',
+        category: 'Food & Crop Toxicity',
+        region: 'Rye and grain systems',
+        compounds: ['ergot alkaloids'],
+        mechanism: 'Potent alkaloids can alter circulation and nervous system function.',
+        effects: ['hallucinations', 'convulsions', 'gangrene'],
+        history: 'Sometimes proposed as a contributing hypothesis for the 1691–1692 Salem witch trials.',
+        culture: 'A useful bridge between plant pathology, toxicology, and cultural interpretation.',
+        themes: ['fungal toxins', 'witch trials', 'crop disease']
+      },
+      {
+        id: 'grass-pea',
+        name: 'Grass Pea',
+        common: 'Grass pea',
+        scientific: 'Lathyrus sativus',
+        category: 'Food & Crop Toxicity',
+        region: 'Cultivated in drought-prone regions',
+        compounds: ['β-ODAP'],
+        mechanism: 'Neurotoxic injury associated with prolonged reliance under famine conditions.',
+        effects: ['neurodegeneration', 'paralysis'],
+        history: 'Commonly discussed in relation to food scarcity and dependence on a hardy famine crop.',
+        culture: 'Shows how resilience crops can become hazardous when social systems fail.',
+        themes: ['famine', 'food systems', 'neurodegeneration']
+      },
+      {
+        id: 'cashew',
+        name: 'Cashew',
+        common: 'Raw cashew shell',
+        scientific: 'Anacardium occidentale',
+        category: 'Food & Crop Toxicity',
+        region: 'Tropical crop systems',
+        compounds: ['urushiol-like irritants'],
+        mechanism: 'Contact exposure causes strong inflammatory skin reactions.',
+        effects: ['severe dermatitis'],
+        history: 'A useful reminder that food plants can be hazardous in processing stages.',
+        culture: 'Excellent for teaching the gap between edible commodity and dangerous raw form.',
+        themes: ['processing hazard', 'contact toxicity', 'commodity crops']
+      },
+      {
+        id: 'peacock-flower',
+        name: 'Peacock Flower',
+        common: 'Pride of Barbados',
+        scientific: 'Caesalpinia pulcherrima',
+        category: 'Poison as Resistance',
+        region: 'Caribbean, especially Suriname and Barbados',
+        compounds: ['course-specific reproductive/abortifacient discussion'],
+        mechanism: 'Historically documented as a plant used to induce abortion.',
+        effects: ['reproductive interruption; context requires careful ethical framing'],
+        history: 'Documented by Maria Sibylla Merian in 1705 based on observations from 1699–1701.',
+        culture: 'A critical case for discussing resistance to slavery, reproductive control, and the preservation of knowledge among enslaved women.',
+        themes: ['resistance', 'slavery', 'reproductive knowledge', 'colonial documentation']
+      }
+    ];
+
+    const categoryFilter = document.getElementById('categoryFilter');
+    const searchInput = document.getElementById('searchInput');
+    const randomBtn = document.getElementById('randomBtn');
+    const themeButtons = document.getElementById('themeButtons');
+    const cardList = document.getElementById('cardList');
+    const detailPanel = document.getElementById('detailPanel');
+    const stats = document.getElementById('stats');
+
+    const categories = [...new Set(archive.map(item => item.category))];
+    categories.forEach(cat => {
+      const option = document.createElement('option');
+      option.value = cat;
+      option.textContent = cat;
+      categoryFilter.appendChild(option);
+    });
+
+    let selectedId = archive[0]?.id;
+
+    function scoreText(item) {
+      return [
+        item.name,
+        item.common,
+        item.scientific,
+        item.category,
+        item.region,
+        item.mechanism,
+        item.history,
+        item.culture,
+        ...item.compounds,
+        ...item.effects,
+        ...item.themes
+      ].join(' ').toLowerCase();
+    }
+
+    function getFiltered() {
+      const term = searchInput.value.trim().toLowerCase();
+      const cat = categoryFilter.value;
+      return archive.filter(item => {
+        const matchesCat = cat === 'all' || item.category === cat;
+        const matchesTerm = !term || scoreText(item).includes(term);
+        return matchesCat && matchesTerm;
+      });
+    }
+
+    function renderStats(items) {
+      const categoryCounts = items.reduce((acc, item) => {
+        acc[item.category] = (acc[item.category] || 0) + 1;
+        return acc;
+      }, {});
+      const chips = [`<span class="chip">${items.length} records shown</span>`];
+      Object.entries(categoryCounts).forEach(([cat, count]) => {
+        chips.push(`<span class="chip">${cat}: ${count}</span>`);
+      });
+      stats.innerHTML = chips.join('');
+    }
+
+    function renderList(items) {
+      if (!items.length) {
+        cardList.innerHTML = `<div class="empty">No records match that search. Try a different toxin, place, theme, or category.</div>`;
+        detailPanel.innerHTML = `<div class="empty">Select a record to view the full archive entry.</div>`;
+        return;
+      }
+
+      if (!items.some(item => item.id === selectedId)) {
+        selectedId = items[0].id;
+      }
+
+      cardList.innerHTML = items.map(item => `
+        <button class="entry ${item.id === selectedId ? 'active' : ''}" data-id="${item.id}">
+          <div class="entry-top">
+            <div>
+              <h3>${item.name}</h3>
+              <div class="latin">${item.scientific}</div>
+            </div>
+            <span class="tag">${item.category}</span>
+          </div>
+          <p><strong>Region:</strong> ${item.region}</p>
+          <p><strong>Compounds:</strong> ${item.compounds.join('; ')}</p>
+        </button>
+      `).join('');
+
+      [...cardList.querySelectorAll('.entry')].forEach(btn => {
+        btn.addEventListener('click', () => {
+          selectedId = btn.dataset.id;
+          render();
+        });
+      });
+
+      renderDetail(items.find(item => item.id === selectedId));
+    }
+
+    function renderDetail(item) {
+      if (!item) {
+        detailPanel.innerHTML = `<div class="empty">Select a record to view the full archive entry.</div>`;
+        return;
+      }
+
+      detailPanel.innerHTML = `
+        <div class="detail-header">
+          <div>
+            <h2>${item.name}</h2>
+            <div class="latin">${item.scientific}</div>
+          </div>
+          <span class="tag">${item.category}</span>
+        </div>
+
+        <div class="meta">
+          <span class="chip">Common name(s): ${item.common}</span>
+          <span class="chip">Region: ${item.region}</span>
+        </div>
+
+        <section class="section">
+          <h3>Active Compounds</h3>
+          <ul>${item.compounds.map(c => `<li>${c}</li>`).join('')}</ul>
+        </section>
+
+        <section class="section">
+          <h3>Mechanism</h3>
+          <p>${item.mechanism}</p>
+        </section>
+
+        <section class="section">
+          <h3>Effects on the Body</h3>
+          <ul>${item.effects.map(e => `<li>${e}</li>`).join('')}</ul>
+        </section>
+
+        <section class="section">
+          <h3>Archive Notes</h3>
+          <div class="record-grid">
+            <div class="record">
+              <strong>Historical Case / Reference</strong>
+              <span>${item.history}</span>
+            </div>
+            <div class="record">
+              <strong>Cultural / Ethnobotanical Notes</strong>
+              <span>${item.culture}</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h3>Themes</h3>
+          <div class="meta">${item.themes.map(t => `<span class="chip">${t}</span>`).join('')}</div>
+        </section>
+      `;
+    }
+
+    function render() {
+      const items = getFiltered();
+      renderStats(items);
+      renderList(items);
+    }
+
+    searchInput.addEventListener('input', render);
+    categoryFilter.addEventListener('change', render);
+    randomBtn.addEventListener('click', () => {
+      const items = getFiltered();
+      if (!items.length) return;
+      const pick = items[Math.floor(Math.random() * items.length)];
+      selectedId = pick.id;
+      render();
+    });
+
+    themeButtons.addEventListener('click', (event) => {
+      const label = event.target.textContent || '';
+      const map = {
+        'Medicine vs Poison': 'medicine',
+        'Resistance': 'resistance',
+        'Witchcraft & Folklore': 'folklore',
+        'Food Toxicity': 'food',
+        'Colonial Science': 'science'
+      };
+      const key = map[label.trim()];
+      if (!key) return;
+      const ids = themeMap[key];
+      const found = archive.find(item => ids.includes(item.id));
+      if (found) {
+        categoryFilter.value = 'all';
+        searchInput.value = '';
+        selectedId = found.id;
+        render();
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>
