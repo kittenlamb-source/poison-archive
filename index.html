@@ -2202,3 +2202,18 @@
   </script>
 </body>
 </html>
+const splashScreen = document.getElementById('splashScreen');
+const enterArchiveBtn = document.getElementById('enterArchiveBtn');
+const dismissNoteBtn = document.getElementById('dismissNoteBtn');
+
+if (enterArchiveBtn) {
+  enterArchiveBtn.addEventListener('click', () => {
+    splashScreen.classList.add('hidden');
+  });
+}
+
+if (dismissNoteBtn) {
+  dismissNoteBtn.addEventListener('click', () => {
+    splashScreen.classList.add('hidden');
+  });
+}
